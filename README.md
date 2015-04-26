@@ -29,7 +29,7 @@ db.search_path :baz do
   db.search_path # => [:baz]
 end
 
-db.search_path :baz, prepend: true do
+db.search_path_prepend :baz do
   db.search_path # => [:baz, :foo, :public]
 end
 

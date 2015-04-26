@@ -18,11 +18,20 @@ module Sequel
         # If given a block and an argument, instead temporarily changes
         # the search path inside the block. It also accepts several arguments,
         # in which case it treats them as an array of schemata to put in search path.
-        # If you use prepend: true, it prepends any given schemata to the current search path.
-        def search_path *a, prepend: false, &block
+        def search_path *a, &block
           if block_given?
             a = a.flatten
-            a += search_path if prepend
+            run_with_search_path a, &block
+          else
+            get_search_path
+          end
+        end
+
+        # Same as search_path, except prepends any given schemata to the current search path
+        # (broken out as separate call for ruby pre-2.0 support).
+        def search_path_prepend *a, &block
+          if block_given?
+            a = a.flatten + search_path
             run_with_search_path a, &block
           else
             get_search_path
